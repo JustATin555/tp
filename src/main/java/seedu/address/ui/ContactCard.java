@@ -59,6 +59,7 @@ public class ContactCard extends UiPart<Region> {
             notes.setText(contact.getNotes().value);
             notes.getParent().setStyle("-fx-background-color: #000000");
         } else {
+            notes.getParent().setVisible(false);
             notes.getParent().setManaged(false);
         }
         if (!contact.getTags().isEmpty()) {
