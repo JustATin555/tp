@@ -5,19 +5,13 @@ import static seedu.address.testutil.TypicalContacts.ALICE;
 import static seedu.address.testutil.TypicalContacts.BENSON;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 import seedu.address.model.contact.Contact;
 import seedu.address.testutil.ContactBuilder;
 
 /**
  * Contains tests for {@code ContactDetailPanel}.
- * These tests are disabled in headless CI environments as they require JavaFX graphical display.
- * The @DisabledIfEnvironmentVariable annotation skips these tests when CI=true,
- * which is automatically set by GitHub Actions and other CI/CD platforms.
- * Tests will run normally in local development environments.
  */
-@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 public class ContactDetailPanelTest extends GuiUnitTest {
 
     @Test
