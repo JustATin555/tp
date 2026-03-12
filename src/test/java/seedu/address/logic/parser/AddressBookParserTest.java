@@ -23,9 +23,10 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.NoteCommand;
+import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.contact.Contact;
-import seedu.address.model.contact.NameContainsKeywordsPredicate;
+import seedu.address.model.contact.ContactMatchesKeywordsPredicate;
 import seedu.address.model.contact.Note;
 import seedu.address.testutil.ContactBuilder;
 import seedu.address.testutil.ContactUtil;
@@ -74,8 +75,9 @@ public class AddressBookParserTest {
     public void parseCommand_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+                FindCommand.COMMAND_WORD + " n/" + keywords.stream().collect(Collectors.joining(" ")));
+        assertEquals(new FindCommand(new ContactMatchesKeywordsPredicate(
+                keywords, List.of(), List.of(), List.of(), List.of())), command);
     }
 
     @Test
@@ -95,6 +97,13 @@ public class AddressBookParserTest {
         NoteCommand command = (NoteCommand) parser.parseCommand(NoteCommand.COMMAND_WORD + " 1 information");
         assertTrue(command instanceof NoteCommand);
         assertEquals(new NoteCommand(INDEX_FIRST_CONTACT, new Note("information")), command);
+    }
+
+    @Test
+    public void parseCommand_view() throws Exception {
+        ViewCommand command = (ViewCommand) parser.parseCommand(
+                ViewCommand.COMMAND_WORD + " " + INDEX_FIRST_CONTACT.getOneBased());
+        assertEquals(new ViewCommand(INDEX_FIRST_CONTACT), command);
     }
 
     @Test

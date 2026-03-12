@@ -5,10 +5,12 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
@@ -32,6 +34,7 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private ContactListPanel contactListPanel;
+    private ContactDetailPanel contactDetailPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
 
@@ -43,6 +46,15 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane contactListPanelPlaceholder;
+
+    @FXML
+    private StackPane contactDetailPanelPlaceholder;
+
+    @FXML
+    private VBox contactDetailContainer;
+
+    @FXML
+    private SplitPane splitPane;
 
     @FXML
     private StackPane resultDisplayPlaceholder;
@@ -113,6 +125,12 @@ public class MainWindow extends UiPart<Stage> {
         contactListPanel = new ContactListPanel(logic.getFilteredContactList());
         contactListPanelPlaceholder.getChildren().add(contactListPanel.getRoot());
 
+        contactDetailPanel = new ContactDetailPanel();
+        contactDetailPanelPlaceholder.getChildren().add(contactDetailPanel.getRoot());
+
+        // Initially hide the detail panel
+        hideContactDetailPanel();
+
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
@@ -121,6 +139,24 @@ public class MainWindow extends UiPart<Stage> {
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+    }
+
+    /**
+     * Shows the contact detail panel.
+     */
+    private void showContactDetailPanel() {
+        contactDetailContainer.setVisible(true);
+        contactDetailContainer.setManaged(true);
+        splitPane.setDividerPositions(0.6);
+    }
+
+    /**
+     * Hides the contact detail panel.
+     */
+    private void hideContactDetailPanel() {
+        contactDetailContainer.setVisible(false);
+        contactDetailContainer.setManaged(false);
+        splitPane.setDividerPositions(1.0);
     }
 
     /**
@@ -184,6 +220,13 @@ public class MainWindow extends UiPart<Stage> {
 
             if (commandResult.isExit()) {
                 handleExit();
+            }
+
+            if (commandResult.isShowContactDetail()) {
+                commandResult.getContactToView().ifPresent(contact -> {
+                    contactDetailPanel.setContact(contact);
+                    showContactDetailPanel();
+                });
             }
 
             return commandResult;

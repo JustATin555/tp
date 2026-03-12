@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="detailPane" styleClass="contact-detail-panel" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15" />
+    </padding>
+
+    <!-- Header with Name -->
+    <HBox alignment="CENTER_LEFT" styleClass="detail-header">
+        <padding>
+            <Insets bottom="10" />
+        </padding>
+        <Label fx:id="name" styleClass="detail-name" text="\$name" />
+    </HBox>
+
+    <!-- Tags -->
+    <VBox fx:id="tagsContainer" styleClass="detail-section">
+        <padding>
+            <Insets bottom="10" />
+        </padding>
+        <Label styleClass="detail-label" text="Tags:" />
+        <FlowPane fx:id="tags" hgap="5" vgap="5">
+            <padding>
+                <Insets top="5" />
+            </padding>
+        </FlowPane>
+    </VBox>
+
+    <!-- Phone -->
+    <VBox fx:id="phoneContainer" styleClass="detail-section">
+        <padding>
+            <Insets bottom="10" />
+        </padding>
+        <Label styleClass="detail-label" text="Phone:" />
+        <Label fx:id="phone" styleClass="detail-value" text="\$phone" />
+    </VBox>
+
+    <!-- Email -->
+    <VBox fx:id="emailContainer" styleClass="detail-section">
+        <padding>
+            <Insets bottom="10" />
+        </padding>
+        <Label styleClass="detail-label" text="Email:" />
+        <Label fx:id="email" styleClass="detail-value" text="\$email" />
+    </VBox>
+
+    <!-- Address -->
+    <VBox fx:id="addressContainer" styleClass="detail-section">
+        <padding>
+            <Insets bottom="10" />
+        </padding>
+        <Label styleClass="detail-label" text="Address:" />
+        <Label fx:id="address" styleClass="detail-value" text="\$address" wrapText="true" />
+    </VBox>
+
+    <!-- Notes -->
+    <VBox fx:id="notesContainer" styleClass="detail-section" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets bottom="10" />
+        </padding>
+        <Label styleClass="detail-label" text="Notes:" />
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <VBox>
+                <Label fx:id="notes" styleClass="detail-value" text="\$notes" wrapText="true" />
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</VBox>
