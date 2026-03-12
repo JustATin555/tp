@@ -16,6 +16,10 @@ import seedu.address.model.contact.Note;
  * Parses input arguments and creates a new {@code NotesCommand} object
  */
 public class NoteCommandParser implements Parser<NoteCommand> {
+
+    private static final Prefix PREFIX_REMOVE = new Prefix("c/");
+    private static final Prefix PREFIX_CLEAR = new Prefix("ca/");
+
     /**
      * Parses the given {@code String} of arguments in the context of the {@code NotesCommand}
      * and returns a {@code NotesCommand} object for execution.
@@ -23,46 +27,99 @@ public class NoteCommandParser implements Parser<NoteCommand> {
      */
     public NoteCommand parse(String args) throws ParseException {
         requireNonNull(args);
+        ArgumentMultimap argMultimap =
+            ArgumentTokenizer.tokenize(args, PREFIX_REMOVE, PREFIX_CLEAR);
+
+        boolean isRemovePrefixPresent = argMultimap.getValue(PREFIX_REMOVE).isPresent();
+        boolean isClearPrefixPresent = argMultimap.getValue(PREFIX_CLEAR).isPresent();
+        boolean isPreamblePresent = !argMultimap.getPreamble().isEmpty();
+
+        if (!isPreamblePresent) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE));
+        }
+
+        if (isRemovePrefixPresent && isClearPrefixPresent) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE));
+        }
+
+        if (isRemovePrefixPresent) {
+            return parseNoteRemoveCommand(argMultimap);
+        }
+
+        if (isClearPrefixPresent) {
+            return parseNoteClearCommand(argMultimap);
+        }
+
+        return parseNoteAddCommand(argMultimap.getPreamble());
+    }
+
+    /**
+     * Parses the given {@code ArgumentMultimap} in the context of the {@code NoteRemoveCommand}
+     * and returns a {@code NoteRemoveCommand} object for execution.
+     * @param argMultimap The ArgumentMultimap containing an {@code Index} preamble
+     *                    and a prefixed number of lines to remove.
+     * @return A {@code NoteRemoveCommand} object with the specified index and number of lines to remove.
+     */
+    private NoteRemoveCommand parseNoteRemoveCommand(ArgumentMultimap argMultimap) throws ParseException {
+        Index index = parseIndex(argMultimap.getPreamble());
+        int numLines = parseNumLines(argMultimap.getValue(PREFIX_REMOVE).get());
+        return new NoteRemoveCommand(index, numLines);
+    }
+
+    /**
+     * Parses the given {@code ArgumentMultimap} in the context of the {@code NoteClearCommand}
+     * and returns a {@code NoteClearCommand} object for execution.
+     * @param argMultimap The ArgumentMultimap containing an {@code Index} preamble.
+     * @return A {@code NoteClearCommand} object with the specified index.
+     */
+    private NoteClearCommand parseNoteClearCommand(ArgumentMultimap argMultimap) throws ParseException {
+        Index index = parseIndex(argMultimap.getPreamble());
+        return new NoteClearCommand(index);
+    }
+
+    /**
+     * Parses the given {@code String} in the context of the {@code NoteAddCommand}
+     * and returns a {@code NoteAddCommand} object for execution.
+     * @param args The {@code String} preamble containing an {@code Index} and {@code String} note.
+     * @return A {@code NoteAddCommand} object with the specified index and new note.
+     */
+    private NoteAddCommand parseNoteAddCommand(String args) throws ParseException {
         String[] noteArgs = args.trim().split(" ", 2);
 
         if (noteArgs.length < 2) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE),
-                    new ArrayIndexOutOfBoundsException());
+                new ArrayIndexOutOfBoundsException());
         }
 
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(noteArgs[0]);
-        } catch (IllegalValueException ive) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE), ive);
-        }
+        Index index = parseIndex(noteArgs[0]);
+        Note notes = new Note(noteArgs[1]);
 
-        String notes = noteArgs[1];
-
-        if (noteArgs[1].equals("ca/")) {
-            return new NoteClearCommand(index);
-        }
-
-        if (notes.startsWith("c/")) {
-            return parseRemoveNotesCommand(index, noteArgs[1]);
-        }
-
-        return new NoteAddCommand(index, new Note(notes));
+        return new NoteAddCommand(index, notes);
     }
 
     /**
-     * Parses the given {@code String} in the context of the {@code RemoveNotesCommand}
-     * and returns a {@code RemoveNotesCommand} object for execution.
-     * @param index Previously parsed index of the contact to remove notes from.
-     * @param args The remaining arguments after parsing the index,
-     *             expected to be in the format "c/NUM_LINES_TO_REMOVE".
-     * @return A RemoveNotesCommand object with the specified index and number of lines to remove.
+     * Parses a {@code String} into an {@code Index}.
+     * @param index A {@code String} index.
+     * @return A parsed {@code Index}.
      */
-    private NoteRemoveCommand parseRemoveNotesCommand(Index index, String args) throws ParseException {
+    private Index parseIndex(String index) throws ParseException {
         try {
-            return new NoteRemoveCommand(index, Integer.parseInt(args.substring(2)));
-        } catch (NumberFormatException err) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE), err);
+            return ParserUtil.parseIndex(index);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE), ive);
+        }
+    }
+
+    /**
+     * Parses a {@code String} into an {@code int} number of lines.
+     * @param numLines A {@code String} number of lines.
+     * @return A parsed {@code int} number of lines.
+     */
+    private int parseNumLines(String numLines) throws ParseException {
+        try {
+            return Integer.parseInt(numLines);
+        } catch (NumberFormatException nfe) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE), nfe);
         }
     }
 }
