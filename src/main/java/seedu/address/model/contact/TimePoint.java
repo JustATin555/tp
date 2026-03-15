@@ -192,7 +192,7 @@ public abstract class TimePoint<T> {
             LocalDate localDate = this.getTime();
             return Mths[localDate.getMonthValue() - 1]
                     + " " + localDate.getDayOfMonth()
-                    + " " + localDate.getYear();
+                    + ", " + localDate.getYear();
         }
 
         @Override
@@ -263,9 +263,9 @@ public abstract class TimePoint<T> {
             LocalDateTime localDateTime = this.getTime();
             return localDateTime.getHour()
                     + ":" + (localDateTime.getMinute() < 10 ? "0" : "") + localDateTime.getMinute()
-                    + " " + Mths[localDateTime.getMonthValue() - 1]
+                    + ", " + Mths[localDateTime.getMonthValue() - 1]
                     + " " + localDateTime.getDayOfMonth()
-                    + " " + localDateTime.getYear();
+                    + ", " + localDateTime.getYear();
         }
 
         @Override

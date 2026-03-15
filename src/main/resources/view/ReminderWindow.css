@@ -6,8 +6,9 @@
     -fx-text-fill: white;
 }
 
-.bold {
+.name {
     -fx-font-weight: bold;
+    -fx-underline: true;
 }
 
 #reminderMessageContainer {

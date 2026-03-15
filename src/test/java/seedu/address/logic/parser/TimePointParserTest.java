@@ -24,7 +24,6 @@ public class TimePointParserTest {
 
     @Test
     public void twoWordDateTests() {
-        // existing
         assertEquals(LocalDate.of(LocalDate.now().getYear(), 10, 12), toTimePoint("Oct 12").getTime());
         assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 12), toTimePoint("12/12").getTime());
         assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 13), toTimePoint("13-12").getTime());
@@ -45,7 +44,8 @@ public class TimePointParserTest {
 
     @Test
     public void threeWordDateTests() {
-        // existing
+        assertEquals(LocalDateTime.of(2025, 10, 12, 10, 30),
+                toTimePoint("Oct 12, 10:30, 2025").getTime());
         assertEquals(LocalDateTime.of(LocalDateTime.now().getYear(), 10, 12, 10, 30),
                 toTimePoint("Oct 12 10:30").getTime());
         assertEquals(LocalDate.of(2020, 12, 12),

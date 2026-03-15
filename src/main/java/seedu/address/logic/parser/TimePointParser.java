@@ -18,10 +18,10 @@ public class TimePointParser {
     private static final String[] VALID_TIME_FORMATS = {
         "D/M", "M/D",
         "D/M/Y", "M/D/Y", "Y/M/D", "Y/D/M", "T/D/M", "T/M/D", "D/M/T", "M/D/T",
-        "T/D/M/Y", "T/M/D/Y", "T/Y/M/D", "T/Y/D/M", "D/M/Y/T", "M/D/Y/T", "Y/M/D/T", "Y/D/M/T",
+        "T/D/M/Y", "T/M/D/Y", "T/Y/M/D", "T/Y/D/M", "D/M/Y/T", "M/D/T/Y", "M/D/Y/T", "Y/M/D/T", "Y/D/M/T",
     };
 
-    private static final char[] VALID_SEPARATOR_WILDCARDS = {'/', ' ', '-', '\\'};
+    private static final char[] VALID_SEPARATOR_WILDCARDS = {'/', ' ', '-', '\\', ','};
 
     /**
      * Converts a string into a TimePoint object.
@@ -56,8 +56,8 @@ public class TimePointParser {
         TimeParameter[] parameters = splitTimePointFormatString(format);
         assert(parameters != null);
         int parameterCount = parameters.length;
-        String[] parameterStrings = separateTimeString(timeString, parameterCount);
-        if (parameterStrings == null) {
+        String[] parameterStrings = timeString.split("[/\s,\\-]+", parameterCount);
+        if (parameterStrings == null || parameterStrings.length != parameterCount) {
             return null;
         }
         TimeParametersBundle parsedParameters = parseParameters(parameterStrings, parameters);
@@ -194,40 +194,6 @@ public class TimePointParser {
         public void setTime(int time) {
             this.time = time;
         }
-    }
-
-    private static String[] separateTimeString(String timeString, int count) {
-        String[] parameterStrings = new String[count];
-        String remainder = timeString;
-        for (int i = 0; i < count - 1; i++) {
-            int separatorIndex = indexOfWildcard(remainder);
-            if (separatorIndex == -1) {
-                return null;
-            }
-            parameterStrings[i] = remainder.substring(0, separatorIndex);
-            remainder = remainder.substring(separatorIndex + 1);
-        }
-        parameterStrings[count - 1] = remainder;
-        return parameterStrings;
-    }
-
-    /**
-     * Helper function to find the index of the first wildcard time separator in regex "[/ \\-]"
-     * @param string String to find wildcard separator symbol in.
-     * @return Index of wildcard separator symbol/
-     */
-    private static int indexOfWildcard(String string) {
-        int index = string.length() + 1;
-        for (char c : VALID_SEPARATOR_WILDCARDS) {
-            int indexOf = string.indexOf(c);
-            if (indexOf < index && indexOf != -1) {
-                index = indexOf;
-            }
-        }
-        if (index < string.length()) {
-            return index;
-        }
-        return -1;
     }
 
     /**

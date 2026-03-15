@@ -41,8 +41,8 @@ public class ReminderWindow extends UiPart<Stage> {
         super(FXML, root);
         reminderMessage.setText(REMINDER_MESSAGE);
         contactList.stream().filter(ReminderWindow::contactHasDueReminders).forEach(contact -> {
-            Label nameLabel = new Label(contact.getName().toString());
-            nameLabel.getStyleClass().add("bold");
+            Label nameLabel = new Label(contact.getName().toString() + ":   ");
+            nameLabel.getStyleClass().add("name");
             reminderMessageContainer.getChildren().add(nameLabel);
             contact.getReminders().stream()
                     .filter(ReminderWindow :: reminderIsDue)
