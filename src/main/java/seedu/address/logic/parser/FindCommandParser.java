@@ -41,6 +41,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         // Checks that all search phrases are non-empty.
         validateNonEmptyPhrases(argMultimap);
+        validateNonEmptyPhrases(argMultimap);
 
         ConjunctiveContactPredicateSet cumulativePredicate = makeCumulativePredicate(argMultimap);
 
