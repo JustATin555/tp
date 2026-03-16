@@ -57,7 +57,7 @@ public class EditCommand extends Command {
     private final EditContactDescriptor editContactDescriptor;
 
     /**
-     * @param index of the contact in the filtered contact list to edit
+     * @param index of the contact in the displayed contact list to edit
      * @param editContactDescriptor details to edit the contact with
      */
     public EditCommand(Index index, EditContactDescriptor editContactDescriptor) {
@@ -71,7 +71,7 @@ public class EditCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Contact> lastShownList = model.getFilteredContactList();
+        List<Contact> lastShownList = model.getDisplayedContactList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
@@ -85,7 +85,7 @@ public class EditCommand extends Command {
         }
 
         model.setContact(contactToEdit, editedContact);
-        model.updateFilteredContactList(PREDICATE_SHOW_ALL_CONTACTS);
+        model.filterDisplayedContactList(PREDICATE_SHOW_ALL_CONTACTS);
         return new CommandResult(String.format(MESSAGE_EDIT_CONTACT_SUCCESS, Messages.format(editedContact)));
     }
 

@@ -82,12 +82,12 @@ public interface Model {
      */
     void setContact(Contact target, Contact editedContact);
 
-    /** Returns an unmodifiable view of the filtered contact list */
-    ObservableList<Contact> getFilteredContactList();
+    /** Returns an unmodifiable view of the displayed contact list */
+    ObservableList<Contact> getDisplayedContactList();
 
     /**
-     * Updates the filter of the filtered contact list to filter by the given {@code predicate}.
+     * Updates the filter of the displayed contact list to filter by the given {@code predicate}.
      * @throws NullPointerException if {@code predicate} is null.
      */
-    void updateFilteredContactList(Predicate<Contact> predicate);
+    void filterDisplayedContactList(Predicate<Contact> predicate);
 }

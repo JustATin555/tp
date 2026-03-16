@@ -18,7 +18,7 @@ public class ListCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.updateFilteredContactList(PREDICATE_SHOW_ALL_CONTACTS);
+        model.filterDisplayedContactList(PREDICATE_SHOW_ALL_CONTACTS);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

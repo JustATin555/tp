@@ -22,7 +22,7 @@ public class NoteClearCommand extends NoteCommand {
     private final Index index;
 
     /**
-     * @param index Index of the contact in the filtered contact list.
+     * @param index Index of the contact in the displayed contact list.
      */
     public NoteClearCommand(Index index) {
         requireAllNonNull(index);
@@ -32,7 +32,7 @@ public class NoteClearCommand extends NoteCommand {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        List<Contact> lastShownList = model.getFilteredContactList();
+        List<Contact> lastShownList = model.getDisplayedContactList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_CONTACT_DISPLAYED_INDEX);
@@ -44,7 +44,7 @@ public class NoteClearCommand extends NoteCommand {
             contactToEdit.getAddress(), new ArrayList<>(), contactToEdit.getTags());
 
         model.setContact(contactToEdit, editedContact);
-        model.updateFilteredContactList(PREDICATE_SHOW_ALL_CONTACTS);
+        model.filterDisplayedContactList(PREDICATE_SHOW_ALL_CONTACTS);
 
         return new CommandResult(generateSuccessMessage(editedContact));
     }

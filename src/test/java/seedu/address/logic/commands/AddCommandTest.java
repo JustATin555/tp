@@ -154,12 +154,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public ObservableList<Contact> getFilteredContactList() {
+        public ObservableList<Contact> getDisplayedContactList() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void updateFilteredContactList(Predicate<Contact> predicate) {
+        public void filterDisplayedContactList(Predicate<Contact> predicate) {
             throw new AssertionError("This method should not be called.");
         }
     }
@@ -211,7 +211,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void updateFilteredContactList(Predicate<Contact> predicate) {
+        public void filterDisplayedContactList(Predicate<Contact> predicate) {
         }
     }
 
