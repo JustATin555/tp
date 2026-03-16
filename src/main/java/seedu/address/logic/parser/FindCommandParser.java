@@ -40,7 +40,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
 
         // Checks that all search phrases are non-empty.
-        ValidateNonEmptyPhrases(argMultimap);
+        validateNonEmptyPhrases(argMultimap);
 
         ConjunctiveContactPredicateSet cumulativePredicate = makeCumulativePredicate(argMultimap);
 
@@ -48,9 +48,12 @@ public class FindCommandParser implements Parser<FindCommand> {
     }
 
     /**
-     * Constructs a cumulative predicate that tests if a contact matches any of the search phrases provided by the user.
+     * Constructs a cumulative predicate that tests if a contact matches any of the
+     * search phrases provided by the user.
      * <br>
-     * Notably, tag search phrases are treated as exact matches, while prefixed search phrases are treated as partial matches.
+     * Notably, tag search phrases are treated as exact matches, while prefixed
+     * search phrases are treated as partial matches.
+     *
      * @param argMultimap
      * @return the cumulative predicate
      */
@@ -72,16 +75,21 @@ public class FindCommandParser implements Parser<FindCommand> {
     }
 
     /**
-     * Checks that all search phrases are non-empty. Throws a ParseException if any of the search phrases is empty or blank.
+     * Checks that all search phrases are non-empty. Throws a ParseException if any
+     * of the search phrases is empty or blank.
      *
      * @param argMultimap
      * @throws ParseException
      */
-    private void ValidateNonEmptyPhrases(ArgumentMultimap argMultimap) throws ParseException {
-        boolean isNameValid = argMultimap.getAllValues(PREFIX_NAME).stream().allMatch(keyword -> !keyword.isBlank());
-        boolean isPhoneValid = argMultimap.getAllValues(PREFIX_PHONE).stream().allMatch(keyword -> !keyword.isBlank());
-        boolean isEmailValid = argMultimap.getAllValues(PREFIX_EMAIL).stream().allMatch(keyword -> !keyword.isBlank());
-        boolean isAddressValid = argMultimap.getAllValues(PREFIX_ADDRESS).stream().allMatch(keyword -> !keyword.isBlank());
+    private void validateNonEmptyPhrases(ArgumentMultimap argMultimap) throws ParseException {
+        boolean isNameValid = argMultimap.getAllValues(PREFIX_NAME).stream()
+                .allMatch(keyword -> !keyword.isBlank());
+        boolean isPhoneValid = argMultimap.getAllValues(PREFIX_PHONE).stream()
+                .allMatch(keyword -> !keyword.isBlank());
+        boolean isEmailValid = argMultimap.getAllValues(PREFIX_EMAIL).stream()
+                .allMatch(keyword -> !keyword.isBlank());
+        boolean isAddressValid = argMultimap.getAllValues(PREFIX_ADDRESS).stream()
+                .allMatch(keyword -> !keyword.isBlank());
         boolean isTagValid = argMultimap.getAllValues(PREFIX_TAG).stream().allMatch(keyword -> !keyword.isBlank());
 
         if (!isNameValid || !isPhoneValid || !isEmailValid || !isAddressValid || !isTagValid) {

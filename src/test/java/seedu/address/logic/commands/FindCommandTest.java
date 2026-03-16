@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_CONTACTS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.TypicalContacts.ALICE;
+import static seedu.address.testutil.TypicalContacts.BENSON;
+import static seedu.address.testutil.TypicalContacts.DANIEL;
 import static seedu.address.testutil.TypicalContacts.ELLE;
 import static seedu.address.testutil.TypicalContacts.getTypicalAddressBook;
 
@@ -58,5 +61,15 @@ public class FindCommandTest {
         expectedModel.updateFilteredContactList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(ELLE), model.getFilteredContactList());
+    }
+
+    @Test
+    public void execute_multipleContactsFound() {
+        String expectedMessage = String.format(MESSAGE_CONTACTS_LISTED_OVERVIEW, 4);
+        Predicate<Contact> predicate = (Contact contact) -> contact.contains("ne");
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredContactList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ALICE, BENSON, DANIEL, ELLE), model.getFilteredContactList());
     }
 }
