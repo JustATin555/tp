@@ -1,7 +1,6 @@
 package seedu.address.testutil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +12,6 @@ import seedu.address.model.contact.Email;
 import seedu.address.model.contact.Name;
 import seedu.address.model.contact.Note;
 import seedu.address.model.contact.Phone;
-import seedu.address.model.contact.Reminder;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -33,7 +31,6 @@ public class ContactBuilder {
     private Optional<Address> address;
     private List<Note> notes;
     private Set<Tag> tags;
-    private List<Reminder> reminders;
 
     /**
      * Creates a {@code ContactBuilder} with the default details.
@@ -45,7 +42,6 @@ public class ContactBuilder {
         address = Optional.of(new Address(DEFAULT_ADDRESS));
         notes = new ArrayList<>();
         tags = new HashSet<>();
-        reminders = new ArrayList<>();
     }
 
     /**
@@ -58,7 +54,6 @@ public class ContactBuilder {
         address = contactToCopy.getAddress();
         notes = contactToCopy.getNotes();
         tags = new HashSet<>(contactToCopy.getTags());
-        reminders = contactToCopy.getReminders();
     }
 
     /**
@@ -109,24 +104,8 @@ public class ContactBuilder {
         return this;
     }
 
-    /**
-     * Sets the {@code Reminder} of the {@code Contact} that we are building.
-     */
-    public ContactBuilder withReminders(String ... reminders) {
-        this.reminders = SampleDataUtil.getReminderList(reminders);
-        return this;
-    }
-
-    /**
-     * Sets the {@code Reminder} of the {@code Contact} that we are building using {@code Reminder}s as input.
-     */
-    public ContactBuilder withReminders(Reminder ... reminders) {
-        this.reminders = Arrays.asList(reminders);
-        return this;
-    }
-
     public Contact build() {
-        return new Contact(name, phone, email, address, notes, tags, reminders);
+        return new Contact(name, phone, email, address, notes, tags);
     }
 
 }

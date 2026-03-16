@@ -7,7 +7,6 @@ import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_CONTACT;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,15 +23,11 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.NoteAddCommand;
-import seedu.address.logic.commands.ReminderAddCommand;
-import seedu.address.logic.commands.ReminderCommand;
 import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.contact.Contact;
 import seedu.address.model.contact.ContactMatchesKeywordsPredicate;
 import seedu.address.model.contact.Note;
-import seedu.address.model.contact.Reminder;
-import seedu.address.model.contact.TimePoint;
 import seedu.address.testutil.ContactBuilder;
 import seedu.address.testutil.ContactUtil;
 import seedu.address.testutil.EditContactDescriptorBuilder;
@@ -109,15 +104,6 @@ public class AddressBookParserTest {
         ViewCommand command = (ViewCommand) parser.parseCommand(
             ViewCommand.COMMAND_WORD + " " + INDEX_FIRST_CONTACT.getOneBased());
         assertEquals(new ViewCommand(INDEX_FIRST_CONTACT), command);
-    }
-
-    @Test
-    public void parseCommand_reminder() throws Exception {
-        ReminderCommand command = (ReminderCommand) parser.parseCommand(
-                ReminderCommand.COMMAND_WORD + " 1 discuss business on/17-March-2026");
-        assertTrue(command instanceof ReminderAddCommand);
-        assertEquals(new ReminderAddCommand(INDEX_FIRST_CONTACT, new Reminder(
-                "discuss business", TimePoint.of(LocalDate.of(2026, 3, 17)))), command);
     }
 
     @Test

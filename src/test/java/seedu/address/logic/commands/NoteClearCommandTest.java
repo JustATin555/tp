@@ -33,7 +33,7 @@ public class NoteClearCommandTest {
 
         Contact contactToEdit = model.getFilteredContactList().get(0);
         Contact editedContact = new Contact(contactToEdit.getName(), contactToEdit.getPhone(), contactToEdit.getEmail(),
-                contactToEdit.getAddress(), NOTES, contactToEdit.getTags(), contactToEdit.getReminders());
+                contactToEdit.getAddress(), NOTES, contactToEdit.getTags());
 
         String expectedMessage = String.format(NoteClearCommand.MESSAGE_REMOVE_NOTES_SUCCESS,
                 Messages.format(contactToEdit));

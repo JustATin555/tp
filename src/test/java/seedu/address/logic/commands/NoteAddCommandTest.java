@@ -33,7 +33,7 @@ public class NoteAddCommandTest {
     public void execute_success() {
         Contact contactToEdit = model.getFilteredContactList().get(0);
         Contact editedContact = new Contact(contactToEdit.getName(), contactToEdit.getPhone(), contactToEdit.getEmail(),
-                contactToEdit.getAddress(), NOTES, contactToEdit.getTags(), contactToEdit.getReminders());
+                contactToEdit.getAddress(), NOTES, contactToEdit.getTags());
         NoteAddCommand notesCommand = new NoteAddCommand(INDEX_FIRST_CONTACT, NOTE);
         String expectedMessage = String.format(NoteAddCommand.MESSAGE_ADD_NOTES_SUCCESS,
                 Messages.format(editedContact));

@@ -41,7 +41,7 @@ public class NoteClearCommand extends NoteCommand {
         Contact contactToEdit = lastShownList.get(index.getZeroBased());
 
         Contact editedContact = new Contact(contactToEdit.getName(), contactToEdit.getPhone(), contactToEdit.getEmail(),
-            contactToEdit.getAddress(), new ArrayList<>(), contactToEdit.getTags(), contactToEdit.getReminders());
+            contactToEdit.getAddress(), new ArrayList<>(), contactToEdit.getTags());
 
         model.setContact(contactToEdit, editedContact);
         model.updateFilteredContactList(PREDICATE_SHOW_ALL_CONTACTS);

@@ -15,7 +15,6 @@ import seedu.address.model.contact.Email;
 import seedu.address.model.contact.Name;
 import seedu.address.model.contact.Note;
 import seedu.address.model.contact.Phone;
-import seedu.address.model.contact.Reminder;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -23,7 +22,6 @@ import seedu.address.model.tag.Tag;
  */
 public class SampleDataUtil {
     public static final List<Note> EMPTY_NOTES = new ArrayList<>();
-    public static final List<Reminder> EMPTY_REMINDERS = new ArrayList<>();
 
     public static Contact[] getSampleContacts() {
         return new Contact[] {
@@ -31,38 +29,32 @@ public class SampleDataUtil {
                 Optional.of(new Email("alexyeoh@example.com")),
                 Optional.of(new Address("Blk 30 Geylang Street 29, #06-40")),
                 EMPTY_NOTES,
-                getTagSet("friends"),
-                EMPTY_REMINDERS),
+                getTagSet("friends")),
             new Contact(new Name("Bernice Yu"), Optional.of(new Phone("99272758")),
                 Optional.of(new Email("berniceyu@example.com")),
                 Optional.of(new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18")),
                 EMPTY_NOTES,
-                getTagSet("colleagues", "friends"),
-                EMPTY_REMINDERS),
+                getTagSet("colleagues", "friends")),
             new Contact(new Name("Charlotte Oliveiro"), Optional.of(new Phone("93210283")),
                 Optional.of(new Email("charlotte@example.com")),
                 Optional.of(new Address("Blk 11 Ang Mo Kio Street 74, #11-04")),
                 EMPTY_NOTES,
-                getTagSet("neighbours"),
-                EMPTY_REMINDERS),
+                getTagSet("neighbours")),
             new Contact(new Name("David Li"), Optional.of(new Phone("91031282")),
                 Optional.of(new Email("lidavid@example.com")),
                 Optional.of(new Address("Blk 436 Serangoon Gardens Street 26, #16-43")),
                 EMPTY_NOTES,
-                getTagSet("family"),
-                EMPTY_REMINDERS),
+                getTagSet("family")),
             new Contact(new Name("Irfan Ibrahim"), Optional.of(new Phone("92492021")),
                 Optional.of(new Email("irfan@example.com")),
                 Optional.of(new Address("Blk 47 Tampines Street 20, #17-35")),
                 EMPTY_NOTES,
-                getTagSet("classmates"),
-                EMPTY_REMINDERS),
+                getTagSet("classmates")),
             new Contact(new Name("Roy Balakrishnan"), Optional.of(new Phone("92624417")),
                 Optional.of(new Email("royb@example.com")),
                 Optional.of(new Address("Blk 45 Aljunied Street 85, #11-31")),
                 EMPTY_NOTES,
-                getTagSet("colleagues"),
-                EMPTY_REMINDERS)
+                getTagSet("colleagues"))
         };
     }
 
@@ -88,16 +80,7 @@ public class SampleDataUtil {
      */
     public static List<Note> getNoteList(String... strings) {
         return Arrays.stream(strings)
-                .map(Note::new)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Returns a reminders list containing the list of strings given.
-     */
-    public static List<Reminder> getReminderList(String... strings) {
-        return Arrays.stream(strings)
-                .map(Reminder :: parseReminder)
+                .map(Note::fromJsonString)
                 .collect(Collectors.toList());
     }
 }

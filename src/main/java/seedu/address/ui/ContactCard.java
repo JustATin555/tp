@@ -1,7 +1,6 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
-import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -43,8 +42,6 @@ public class ContactCard extends UiPart<Region> {
     @FXML
     private VBox notesContainer;
     @FXML
-    private Label notes;
-    @FXML
     private FlowPane tags;
 
     /**
@@ -59,18 +56,11 @@ public class ContactCard extends UiPart<Region> {
         phone.setText(contact.getPhone().map(phone -> phone.value).orElse(""));
         address.setText(contact.getAddress().map(address -> address.value).orElse(""));
         email.setText(contact.getEmail().map(email -> email.value).orElse(""));
-        if (!(contact.getNotes().isEmpty() && contact.getReminders().isEmpty())) {
-            contact.getReminders().forEach(
-                    reminder -> {
+        if (!(contact.getNotes().isEmpty())) {
+            contact.getNotes().forEach(
+                    note -> {
                         notesContainer.getChildren().add(
-                                notesContainer.getChildren().size() - 1,
-                                new ReminderLabel(reminder, notesContainer.getStyleClass().toString())); });
-            if (!contact.getNotes().isEmpty()) {
-                notes.setText(contact.getNotesString());
-            } else {
-                notes.setVisible(false);
-                notes.setManaged(false);
-            }
+                                new NoteLabel(note, notesContainer.getStyleClass().toString())); });
             notesContainer.setStyle("-fx-background-color: #000000");
         } else {
             notesContainer.setVisible(false);
@@ -82,7 +72,7 @@ public class ContactCard extends UiPart<Region> {
                     .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
             if (!contact.getReminders().isEmpty()) {
                 Label reminderLabel = new Label("Reminder");
-                if (ReminderWindow.hasDueReminders(List.of(contact))) {
+                if (contact.hasDueReminders()) {
                     reminderLabel.getStyleClass().add("warning-label");
                 }
                 tags.getChildren().add(reminderLabel);

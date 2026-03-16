@@ -28,14 +28,13 @@ public class Contact {
     private final Optional<Address> address;
     private final List<Note> notes;
     private final Set<Tag> tags = new HashSet<>();
-    private final List<Reminder> reminders;
 
     /**
      * Every field must be present and not null.
      */
     public Contact(
             Name name, Optional<Phone> phone, Optional<Email> email,
-            Optional<Address> address, List<Note> notes, Set<Tag> tags, List<Reminder> reminders) {
+            Optional<Address> address, List<Note> notes, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
@@ -43,7 +42,6 @@ public class Contact {
         this.address = address;
         this.notes = List.copyOf(notes);
         this.tags.addAll(tags);
-        this.reminders = List.copyOf(reminders);
     }
 
     public Name getName() {
@@ -85,8 +83,25 @@ public class Contact {
         return Collections.unmodifiableSet(tags);
     }
 
-    public List<Reminder> getReminders() {
-        return Collections.unmodifiableList(reminders);
+    /**
+     * Checks if this contact contain reminders that are due in {@code DUE_PERIOD_DAYS} number of days.
+     */
+    public boolean hasDueReminders() {
+        return notes.stream().anyMatch(Note::hasDueReminder);
+    }
+
+    /**
+     * Returns a {@code List} containing every {@code Note} in this contact that is a reminder.
+     */
+    public List<Note> getReminders() {
+        return notes.stream().filter(Note::isReminder).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a {@code List} containing every {@code Note} in this contact that is a reminder that is due.
+     */
+    public List<Note> getDueReminders() {
+        return notes.stream().filter(Note::hasDueReminder).collect(Collectors.toList());
     }
 
     /**

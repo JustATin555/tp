@@ -60,21 +60,6 @@
         <Label fx:id="address" styleClass="detail-value" text="\$address" wrapText="true" />
     </VBox>
 
-    <!-- Reminders -->
-   <VBox fx:id="remindersContainer" styleClass="detail-section" VBox.vgrow="ALWAYS">
-      <padding>
-         <Insets bottom="10" />
-      </padding>
-      <children>
-         <Label styleClass="detail-label, bold" text="Reminders:" />
-         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
-            <content>
-               <VBox fx:id="reminders" styleClass="detail-value"/>
-            </content>
-         </ScrollPane>
-      </children>
-   </VBox>
-
     <!-- Notes -->
     <VBox fx:id="notesContainer" styleClass="detail-section" VBox.vgrow="ALWAYS">
         <padding>
@@ -83,7 +68,7 @@
         <Label styleClass="detail-label" text="Notes:" />
         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
             <VBox>
-                <Label fx:id="notes" styleClass="detail-value" text="\$notes" wrapText="true" />
+                <VBox fx:id="notes" styleClass="detail-value"/>
             </VBox>
         </ScrollPane>
     </VBox>

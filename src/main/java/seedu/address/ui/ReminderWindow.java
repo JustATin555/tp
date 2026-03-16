@@ -1,6 +1,5 @@
 package seedu.address.ui;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -10,18 +9,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.contact.Contact;
-import seedu.address.model.contact.Reminder;
-import seedu.address.model.contact.TimePoint;
+import seedu.address.model.contact.Note;
 
 /**
  * Controller for a help page
  */
 public class ReminderWindow extends UiPart<Stage> {
 
-    public static final int DUE_PERIOD_DAYS = 7;
-
     public static final String REMINDER_MESSAGE =
-            String.format("The following reminders are due in %d days: \n", DUE_PERIOD_DAYS);
+            String.format("The following reminders are due in %d days: \n", Note.DUE_PERIOD_DAYS);
 
     private static final Logger logger = LogsCenter.getLogger(ReminderWindow.class);
     private static final String FXML = "ReminderWindow.fxml";
@@ -40,14 +36,14 @@ public class ReminderWindow extends UiPart<Stage> {
     public ReminderWindow(Stage root, List<Contact> contactList) {
         super(FXML, root);
         reminderMessage.setText(REMINDER_MESSAGE);
-        contactList.stream().filter(ReminderWindow::contactHasDueReminders).forEach(contact -> {
+        contactList.stream().filter(Contact::hasDueReminders).forEach(contact -> {
             Label nameLabel = new Label(contact.getName().toString() + ":   ");
             nameLabel.getStyleClass().add("name");
             reminderMessageContainer.getChildren().add(nameLabel);
-            contact.getReminders().stream()
-                    .filter(ReminderWindow :: reminderIsDue)
+            contact.getNotes().stream()
+                    .filter(Note :: hasDueReminder)
                     .forEach(reminder -> {
-                        ReminderLabel reminderLabel = new ReminderLabel(reminder);
+                        NoteLabel reminderLabel = new NoteLabel(reminder);
                         reminderLabel.hideHeader();
                         reminderMessageContainer.getChildren().add(reminderLabel); });
         });
@@ -103,24 +99,5 @@ public class ReminderWindow extends UiPart<Stage> {
      */
     public void focus() {
         getRoot().requestFocus();
-    }
-
-    /**
-     * Checks if a list of contacts contain reminders that are due in {@code DUE_PERIOD_DAYS} number of days.
-     *
-     * @param contactList List of contacts to check for reminders that are due soon.
-     */
-    public static boolean hasDueReminders(List<Contact> contactList) {
-        return contactList.stream().anyMatch(ReminderWindow::contactHasDueReminders);
-    }
-
-    private static boolean contactHasDueReminders(Contact contact) {
-        return contact.getReminders().stream().anyMatch(ReminderWindow :: reminderIsDue);
-    }
-
-    private static boolean reminderIsDue(Reminder reminder) {
-        TimePoint cutOffTime = TimePoint.of(LocalDateTime.now().plusDays(DUE_PERIOD_DAYS));
-        TimePoint nowTime = TimePoint.of(LocalDateTime.now());
-        return reminder.timePoint.isBefore(cutOffTime) && reminder.timePoint.isAfter(nowTime);
     }
 }

@@ -8,12 +8,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import seedu.address.model.contact.Reminder;
+import seedu.address.model.contact.Note;
 
 /**
  * A UI component that displays information of a {@code Reminder}.
  */
-public class ReminderLabel extends HBox {
+public class NoteLabel extends HBox {
 
     private static final String FXML = "/view/ReminderLabel.fxml";
 
@@ -29,8 +29,8 @@ public class ReminderLabel extends HBox {
     /**
      * Creates a {@code ReminderLabel}.
      */
-    public ReminderLabel(Reminder reminder) {
-        requireNonNull(reminder);
+    public NoteLabel(Note note) {
+        requireNonNull(note);
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML));
 
         loader.setRoot(this);
@@ -41,41 +41,26 @@ public class ReminderLabel extends HBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (!reminder.note.isEmpty()) {
-            reminderNote.setText(reminder.note);
+
+        reminderNote.setText(note.value);
+
+        if (note.timePoint != null) {
+            reminderTime.setText(note.timePoint.toString());
         } else {
-            reminderNote.setVisible(false);
-            reminderNote.setManaged(false);
+            reminderHeader.setVisible(false);
+            reminderHeader.setManaged(false);
             onText.setVisible(false);
             onText.setManaged(false);
+            reminderTime.setVisible(false);
+            reminderTime.setManaged(false);
         }
-        reminderTime.setText(reminder.timePoint.toString());
     }
 
     /**
      * Creates a {@code ReminderLabel} with a set style.
      */
-    public ReminderLabel(Reminder reminder, String style) {
-        requireNonNull(reminder);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML));
-
-        loader.setRoot(this);
-        loader.setController(this);
-
-        try {
-            loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (!reminder.note.isEmpty()) {
-            reminderNote.setText(reminder.note);
-        } else {
-            reminderNote.setVisible(false);
-            reminderNote.setManaged(false);
-            onText.setVisible(false);
-            onText.setManaged(false);
-        }
-        reminderTime.setText(reminder.timePoint.toString());
+    public NoteLabel(Note note, String style) {
+        this(note);
         reminderHeader.getStyleClass().add(style);
         reminderNote.getStyleClass().add(style);
         onText.getStyleClass().add(style);

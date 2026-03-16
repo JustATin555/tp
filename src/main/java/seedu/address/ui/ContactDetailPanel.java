@@ -27,9 +27,7 @@ public class ContactDetailPanel extends UiPart<Region> {
     @FXML
     private Label address;
     @FXML
-    private VBox reminders;
-    @FXML
-    private Label notes;
+    private VBox notes;
     @FXML
     private FlowPane tags;
     @FXML
@@ -40,8 +38,6 @@ public class ContactDetailPanel extends UiPart<Region> {
     private VBox emailContainer;
     @FXML
     private VBox addressContainer;
-    @FXML
-    private VBox remindersContainer;
     @FXML
     private VBox notesContainer;
 
@@ -95,22 +91,12 @@ public class ContactDetailPanel extends UiPart<Region> {
         }
 
         // Reminders
-        reminders.getChildren().clear();
-        if (!contact.getReminders().isEmpty()) {
-            contact.getReminders().forEach(reminder -> {
-                ReminderLabel reminderLabel = new ReminderLabel(reminder, reminders.getStyleClass().toString());
-                reminderLabel.hideHeader();
-                reminders.getChildren().add(reminderLabel); });
-            remindersContainer.setVisible(true);
-            remindersContainer.setManaged(true);
-        } else {
-            remindersContainer.setVisible(false);
-            remindersContainer.setManaged(false);
-        }
-
-        // Notes
+        notes.getChildren().clear();
         if (!contact.getNotes().isEmpty()) {
-            notes.setText(contact.getNotesString());
+            contact.getNotes().forEach(note -> {
+                NoteLabel reminderLabel = new NoteLabel(note, notes.getStyleClass().toString());
+                reminderLabel.hideHeader();
+                notes.getChildren().add(reminderLabel); });
             notesContainer.setVisible(true);
             notesContainer.setManaged(true);
         } else {
@@ -143,9 +129,8 @@ public class ContactDetailPanel extends UiPart<Region> {
         phone.setText("");
         email.setText("");
         address.setText("");
-        notes.setText("");
         tags.getChildren().clear();
-        reminders.getChildren().clear();
+        notes.getChildren().clear();
 
         phoneContainer.setVisible(false);
         phoneContainer.setManaged(false);
@@ -155,8 +140,6 @@ public class ContactDetailPanel extends UiPart<Region> {
         addressContainer.setManaged(false);
         notesContainer.setVisible(false);
         notesContainer.setManaged(false);
-        remindersContainer.setVisible(false);
-        remindersContainer.setManaged(false);
         tagsContainer.setVisible(false);
         tagsContainer.setManaged(false);
 
