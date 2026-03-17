@@ -142,8 +142,8 @@ public class MainWindow extends UiPart<Stage> {
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
 
-        if (logic.getFilteredContactList().stream().anyMatch(Contact::hasDueReminders)) {
-            reminderWindow = new ReminderWindow(logic.getFilteredContactList());
+        if (logic.getDisplayedContactList().stream().anyMatch(Contact::hasDueReminders)) {
+            reminderWindow = new ReminderWindow(logic.getDisplayedContactList());
             reminderWindow.show();
         }
     }
