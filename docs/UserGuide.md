@@ -124,15 +124,17 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
 
-### Adding notes to a contact : `note`
+### Adding notes/reminders to a contact : `note`
 
 Adds notes to an existing contact in the address book.
 
-Format: `note INDEX APPENDED_LINE`
+Format: `note INDEX APPENDED_LINE [on/TIME]`
 
 * Adds `APPENDED_LINE` to the contact at the specified `INDEX`.
 * The index refers to the index number shown in the displayed contact list.
 * The index **must be a positive integer** 1, 2, 3, …​
+* `TIME` can accept most conventional formats, and may omit year. If unable to parse as a date, will be saved as a string instead.
+* Filling the `TIME` field will turn the note into a reminder. The system will warn of reminders due within 1 week.
 
 ### Locating contacts by name: `find`
 
