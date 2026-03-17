@@ -1,5 +1,6 @@
 package seedu.address.model.timepoint;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,6 +10,14 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 public class TimePointTest {
+    @Test
+    public void ofTests() {
+        assertEquals(TimePoint.of("string"), new StringTimePoint("string"));
+        assertEquals(TimePoint.of(LocalDate.of(2026, 10, 20)), new DateTimePoint(LocalDate.of(2026, 10, 20)));
+        assertEquals(TimePoint.of(
+                LocalDateTime.of(2026, 5, 6, 7, 8)), new DateTimeTimePoint(LocalDateTime.of(2026, 5, 6, 7, 8)));
+    }
+
     @Test
     public void isSameDayAsTests() {
         TimePoint stringDate = TimePoint.of("2024 Oct 10");
