@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLEAR;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMOVE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -32,6 +33,36 @@ public class NoteCommandParserTest {
             parser,
             "1 " + NOTES_STRING,
             expectedNoteAddCommand);
+    }
+
+    @Test
+    public void parse_stringReminderNoteAddCommand_success() {
+        NoteAddCommand expectedNoteAddCommand =
+                new NoteAddCommand(INDEX_FIRST_CONTACT, new Note(NOTES_STRING));
+        assertParseSuccess(
+                parser,
+                "1 " + NOTES_STRING + " " + PREFIX_ON + "timeString",
+                expectedNoteAddCommand);
+    }
+
+    @Test
+    public void parse_dateReminderNoteAddCommand_success() {
+        NoteAddCommand expectedNoteAddCommand =
+                new NoteAddCommand(INDEX_FIRST_CONTACT, new Note(NOTES_STRING));
+        assertParseSuccess(
+                parser,
+                "1 " + NOTES_STRING + " " + PREFIX_ON + "March 11",
+                expectedNoteAddCommand);
+    }
+
+    @Test
+    public void parse_datetimeReminderNoteAddCommand_success() {
+        NoteAddCommand expectedNoteAddCommand =
+                new NoteAddCommand(INDEX_FIRST_CONTACT, new Note(NOTES_STRING));
+        assertParseSuccess(
+                parser,
+                "1 " + NOTES_STRING + " " + PREFIX_ON + "March 11 2025 13:30",
+                expectedNoteAddCommand);
     }
 
     @Test

@@ -90,7 +90,7 @@ public class ContactDetailPanel extends UiPart<Region> {
             addressContainer.setManaged(false);
         }
 
-        // Reminders
+        // Notes
         notes.getChildren().clear();
         if (!contact.getNotes().isEmpty()) {
             contact.getNotes().forEach(note -> {

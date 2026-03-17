@@ -8,9 +8,13 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ON;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalContacts.ALICE;
 import static seedu.address.testutil.TypicalContacts.BOB;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -119,12 +123,56 @@ public class ContactTest {
         assertTrue(JOHN.hasTag("contractor"));
         assertFalse(JOHN.hasTag("doctor"));
     }
+
     @Test
     public void containsInNotesTest() {
         assertTrue(JOHN.containsInNotes("2024"));
         assertTrue(JOHN.containsInNotes("feb"));
         assertTrue(JOHN.containsInNotes("In"));
         assertFalse(JOHN.containsInNotes("John"));
+    }
+
+    @Test
+    public void remindersTest() {
+        String notes = "notes";
+        TimePoint dueReminderTime = TimePoint.of(LocalDate.now().plusDays(Note.DUE_PERIOD_DAYS - 1));
+        String dueReminderString = "notes " + PREFIX_ON + dueReminderTime.toString();
+        Note dueReminder = new Note("notes", dueReminderTime);
+        TimePoint notDueReminderTime = TimePoint.of(LocalDate.now().minusDays(1));
+        Note notDueReminder = new Note("notes", notDueReminderTime);
+        String notDueReminderString = "notes " + PREFIX_ON + notDueReminderTime.toString();
+
+        //tests for hasDueReminders()
+        assertFalse(new ContactBuilder().build().hasDueReminders());
+        assertFalse(new ContactBuilder().withNotes(notes).build().hasDueReminders());
+        assertFalse(new ContactBuilder().withNotes(notDueReminderString).build().hasDueReminders());
+        assertTrue(new ContactBuilder().withNotes(dueReminderString).build().hasDueReminders());
+        assertTrue(new ContactBuilder().withNotes(notDueReminderString, dueReminderString).build().hasDueReminders());
+
+        //tests for getReminders()
+        assertEquals(List.of(), new ContactBuilder().build().getReminders());
+        assertEquals(List.of(), new ContactBuilder().withNotes(notes).build().getReminders());
+        assertEquals(
+                List.of(notDueReminder),
+                new ContactBuilder().withNotes(notDueReminderString).build().getReminders());
+        assertEquals(
+                List.of(dueReminder),
+                new ContactBuilder().withNotes(dueReminderString).build().getReminders());
+        assertEquals(
+                List.of(dueReminder, notDueReminder),
+                new ContactBuilder().withNotes(notes, dueReminderString, notDueReminderString).build().getReminders());
+
+        //tests for getDueReminders()
+        assertEquals(List.of(), new ContactBuilder().build().getDueReminders());
+        assertEquals(List.of(), new ContactBuilder().withNotes(notes).build().getDueReminders());
+        assertEquals(List.of(), new ContactBuilder().withNotes(notDueReminderString).build().getDueReminders());
+        assertEquals(
+                List.of(dueReminder),
+                new ContactBuilder().withNotes(dueReminderString).build().getDueReminders());
+        assertEquals(
+                List.of(dueReminder),
+                new ContactBuilder().withNotes(
+                        notes, dueReminderString, notDueReminderString).build().getDueReminders());
     }
 
     @Test

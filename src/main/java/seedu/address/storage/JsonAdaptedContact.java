@@ -32,7 +32,6 @@ class JsonAdaptedContact {
     private final Optional<String> address;
     private final List<String> notes = new ArrayList<>();
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
-    private final List<String> reminders = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedContact} with the given contact details.
@@ -50,9 +49,6 @@ class JsonAdaptedContact {
         this.address = address;
         if (tags != null) {
             this.tags.addAll(tags);
-        }
-        if (reminders != null) {
-            this.reminders.addAll(reminders);
         }
     }
 

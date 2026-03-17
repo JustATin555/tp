@@ -15,6 +15,8 @@ import seedu.address.logic.parser.TimePointParser;
  */
 public class Note {
 
+    //Temporarily placed here for convenience, should be moved into
+    //UserPrefs to allow users to set their own reminder periods
     public static final int DUE_PERIOD_DAYS = 7;
 
     public final String value;
