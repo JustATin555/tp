@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.timepoint.TimePoint;
+
 public class NoteTest {
     @Test
     public void constructor_null_throwsNullPointerException() {

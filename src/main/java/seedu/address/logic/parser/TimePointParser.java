@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 
-import seedu.address.model.contact.TimePoint;
+import seedu.address.model.timepoint.TimePoint;
 
 /**
  * Handles parsing of user input into TimePoint objects specifically.
