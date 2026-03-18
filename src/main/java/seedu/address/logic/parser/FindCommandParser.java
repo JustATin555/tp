@@ -30,7 +30,7 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
-        // Checks that argument(s) are provided.
+        // Checks that argument(s) are provided
         if (args.isBlank()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
@@ -39,8 +39,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
 
-        // Checks that all search phrases are non-empty.
-        validateNonEmptyPhrases(argMultimap);
+        // Checks that all search phrases are non-empty
         validateNonEmptyPhrases(argMultimap);
 
         ConjunctiveContactPredicateSet cumulativePredicate = makeCumulativePredicate(argMultimap);
