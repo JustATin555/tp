@@ -18,6 +18,7 @@ import seedu.address.model.contact.Address;
 import seedu.address.model.contact.Email;
 import seedu.address.model.contact.Name;
 import seedu.address.model.contact.Phone;
+import seedu.address.model.tag.RankedTag;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
@@ -26,6 +27,8 @@ public class ParserUtilTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_RANKED_TAG_1 = "#friend:1";
+    private static final String INVALID_RANKED_TAG_2 = "friend:#1";
 
     private static final String VALID_NAME_UNPARSED = "RacHEl   walker";
     private static final String VALID_NAME = "Rachel Walker";
@@ -35,6 +38,10 @@ public class ParserUtilTest {
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_RANKED_TAG = "friend:1";
+    private static final String VALID_RANKED_TAG_NAME = "friend";
+    private static final String VALID_RANKED_TAG_VALUE = "1";
+
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -158,6 +165,8 @@ public class ParserUtilTest {
     @Test
     public void parseTag_invalidValue_throwsParseException() {
         assertThrows(ParseException.class, () -> ParserUtil.parseTag(INVALID_TAG));
+        assertThrows(ParseException.class, () -> ParserUtil.parseTag(INVALID_RANKED_TAG_1));
+        assertThrows(ParseException.class, () -> ParserUtil.parseTag(INVALID_RANKED_TAG_2));
     }
 
     @Test
@@ -171,6 +180,12 @@ public class ParserUtilTest {
         String tagWithWhitespace = WHITESPACE + VALID_TAG_1 + WHITESPACE;
         Tag expectedTag = new Tag(VALID_TAG_1);
         assertEquals(expectedTag, ParserUtil.parseTag(tagWithWhitespace));
+    }
+
+    @Test
+    public void parseTag_validValueWithColon_returnsRankedTag() throws Exception {
+        RankedTag expectedRankedTag = new RankedTag(VALID_RANKED_TAG_NAME, VALID_RANKED_TAG_VALUE);
+        assertEquals(expectedRankedTag, ParserUtil.parseTag(VALID_RANKED_TAG));
     }
 
     @Test
