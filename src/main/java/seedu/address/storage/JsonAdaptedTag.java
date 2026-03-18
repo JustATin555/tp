@@ -20,8 +20,12 @@ class JsonAdaptedTag {
      */
     @JsonCreator
     public JsonAdaptedTag(String[] tagParams) {
-        if (tagParams.length == 0 || tagParams.length > 2) {
+        if (tagParams.length == 0) {
             throw new IllegalArgumentException("Tag parameters cannot be empty");
+        }
+
+        if (tagParams.length > 2) {
+            throw new IllegalArgumentException("Cannot have more than 2 tag parameters");
         }
 
         this.tagName = tagParams[0];

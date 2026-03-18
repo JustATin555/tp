@@ -26,7 +26,15 @@ public class JsonAdaptedContactTest {
     private static final Optional<String> INVALID_PHONE = Optional.of("+651234");
     private static final Optional<String> INVALID_ADDRESS = Optional.of(" ");
     private static final Optional<String> INVALID_EMAIL = Optional.of("example.com");
-    private static final String[] INVALID_TAG = new String[] { "#friend" };
+    private static final String[][] INVALID_TAG_PARAMETERS = new String[][] {
+        {},
+        { "friend", "1", "2" }
+    };
+    private static final String[][] INVALID_TAGS = new String[][] {
+        { "#friend" },
+        { "#friend", "1" },
+        { "friend", "#1"}
+    };
 
     private static final String VALID_NAME = BENSON.getName().toString();
     private static final String VALID_ID = BENSON.getId().toString();
@@ -190,14 +198,23 @@ public class JsonAdaptedContactTest {
     }
 
     @Test
-    public void toModelType_invalidTags_throwsIllegalValueException() {
-        List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
-        invalidTags.add(new JsonAdaptedTag(INVALID_TAG));
-        JsonAdaptedContact contact =
+    public void toModelType_invalidTagParameters_throwsIllegalArgumentException() {
+        for (String[] invalidTag : INVALID_TAG_PARAMETERS) {
+            assertThrows(IllegalArgumentException.class, () -> new JsonAdaptedTag(invalidTag));
+        }
+    }
+
+    @Test
+    public void toModelType_invalidTagValues_throwsIllegalValueException() {
+        for (String[] invalidTag : INVALID_TAGS) {
+            List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
+            invalidTags.add(new JsonAdaptedTag(invalidTag));
+            JsonAdaptedContact contact =
                 new JsonAdaptedContact(
-                        VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_LAST_CONTACTED,
-                        VALID_NOTES, invalidTags);
-        assertThrows(IllegalValueException.class, contact::toModelType);
+                    VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_LAST_CONTACTED,
+                    VALID_NOTES, invalidTags);
+            assertThrows(IllegalValueException.class, contact::toModelType);
+        }
     }
 
     @Test
