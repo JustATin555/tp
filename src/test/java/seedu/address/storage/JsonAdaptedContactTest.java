@@ -27,15 +27,8 @@ public class JsonAdaptedContactTest {
     private static final Optional<String> INVALID_PHONE = Optional.of("+651234");
     private static final Optional<String> INVALID_ADDRESS = Optional.of(" ");
     private static final Optional<String> INVALID_EMAIL = Optional.of("example.com");
-    private static final String[][] INVALID_TAG_PARAMETERS = new String[][] {
-        {},
-        { "friend", "1", "2" }
-    };
-    private static final String[][] INVALID_TAGS = new String[][] {
-        { "#friend" },
-        { "#friend", "1" },
-        { "friend", "#1"}
-    };
+    private static final String INVALID_TAG_NAME = "#friends";
+    private static final String INVALID_TAG_RANK = "#best";
 
     private static final String VALID_NAME = BENSON.getName().toString();
     private static final String VALID_ID = BENSON.getId().toString();
@@ -47,6 +40,8 @@ public class JsonAdaptedContactTest {
     private static final List<String> VALID_NOTES = BENSON.getNotes().stream()
             .map(note -> note.value)
             .collect(Collectors.toList());
+    private static final String VALID_TAG_NAME = "friends";
+    private static final String VALID_TAG_RANK = "best";
     private static final List<JsonAdaptedTag> VALID_TAGS = BENSON.getTags().stream()
             .map(JsonAdaptedTag::new)
             .collect(Collectors.toList());
@@ -213,22 +208,63 @@ public class JsonAdaptedContactTest {
     }
 
     @Test
-    public void toModelType_invalidTagParameters_throwsIllegalArgumentException() {
-        for (String[] invalidTag : INVALID_TAG_PARAMETERS) {
-            assertThrows(IllegalArgumentException.class, () -> new JsonAdaptedTag(invalidTag));
-        }
+    public void toModelType_missingTagName_throwsIllegalValueException() {
+        List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
+        invalidTags.add(new JsonAdaptedTag((String) null));
+        JsonAdaptedContact contact = new JsonAdaptedContact(
+            VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+            VALID_LAST_CONTACTED, VALID_LAST_UPDATED, VALID_NOTES, invalidTags);
+        assertThrows(IllegalValueException.class, contact::toModelType);
     }
 
     @Test
-    public void toModelType_invalidTagValues_throwsIllegalValueException() {
-        for (String[] invalidTag : INVALID_TAGS) {
-            List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
-            invalidTags.add(new JsonAdaptedTag(invalidTag));
-            JsonAdaptedContact contact = new JsonAdaptedContact(
-                VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                VALID_LAST_CONTACTED, VALID_LAST_UPDATED, VALID_NOTES, invalidTags);
-            assertThrows(IllegalValueException.class, contact::toModelType);
-        }
+    public void toModelType_invalidTagName_throwsIllegalValueException() {
+        List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
+        invalidTags.add(new JsonAdaptedTag(INVALID_TAG_NAME));
+        JsonAdaptedContact contact = new JsonAdaptedContact(
+            VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+            VALID_LAST_CONTACTED, VALID_LAST_UPDATED, VALID_NOTES, invalidTags);
+        assertThrows(IllegalValueException.class, contact::toModelType);
+    }
+
+    @Test
+    public void toModelType_missingRankedTagName_throwsIllegalValueException() {
+        List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
+        invalidTags.add(new JsonAdaptedRankedTag(null, VALID_TAG_RANK));
+        JsonAdaptedContact contact = new JsonAdaptedContact(
+            VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+            VALID_LAST_CONTACTED, VALID_LAST_UPDATED, VALID_NOTES, invalidTags);
+        assertThrows(IllegalValueException.class, contact::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidRankedTagName_throwsIllegalValueException() {
+        List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
+        invalidTags.add(new JsonAdaptedRankedTag(INVALID_TAG_NAME, VALID_TAG_RANK));
+        JsonAdaptedContact contact = new JsonAdaptedContact(
+            VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+            VALID_LAST_CONTACTED, VALID_LAST_UPDATED, VALID_NOTES, invalidTags);
+        assertThrows(IllegalValueException.class, contact::toModelType);
+    }
+
+    @Test
+    public void toModelType_missingRankedTagRank_throwsIllegalValueException() {
+        List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
+        invalidTags.add(new JsonAdaptedRankedTag(VALID_TAG_NAME, null));
+        JsonAdaptedContact contact = new JsonAdaptedContact(
+            VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+            VALID_LAST_CONTACTED, VALID_LAST_UPDATED, VALID_NOTES, invalidTags);
+        assertThrows(IllegalValueException.class, contact::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidRankedTagRank_throwsIllegalValueException() {
+        List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
+        invalidTags.add(new JsonAdaptedRankedTag(VALID_TAG_NAME, INVALID_TAG_RANK));
+        JsonAdaptedContact contact = new JsonAdaptedContact(
+            VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+            VALID_LAST_CONTACTED, VALID_LAST_UPDATED, VALID_NOTES, invalidTags);
+        assertThrows(IllegalValueException.class, contact::toModelType);
     }
 
     @Test

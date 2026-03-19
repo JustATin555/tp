@@ -33,7 +33,7 @@ public class ContactCardTest extends GuiUnitTest {
                     .withEmail("alice@example.com")
                     .withAddress("123, Jurong West Ave 6, #08-111")
                     .withLastContacted("22/02/26")
-                    .withTags("friends", "teammate")
+                    .withTags("friends", "teammate", "friends:1")
                     .withNotes("follow up")
                     .build(), 1);
 

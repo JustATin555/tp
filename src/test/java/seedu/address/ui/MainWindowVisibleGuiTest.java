@@ -1,14 +1,10 @@
 package seedu.address.ui;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
@@ -28,86 +24,23 @@ import seedu.address.model.contact.Contact;
 import seedu.address.testutil.ContactBuilder;
 
 /**
- * Contains tests for {@code MainWindow} panel management logic.
+ * Contains tests for {@code MainWindow} panel management logic which require {@code show()} to be run.
  */
-public class MainWindowTest extends GuiUnitTest {
+public class MainWindowVisibleGuiTest extends GuiUnitTest {
 
     private MainWindow mainWindow;
     private StubLogic logic;
 
-    @BeforeEach
-    public void setUp() throws Exception {
+    @Test
+    public void scroll_success() throws Exception {
         logic = new StubLogic();
         runAndWait(() -> {
             Stage stage = new Stage();
             mainWindow = new MainWindow(stage, logic);
+            mainWindow.show();
             mainWindow.fillInnerParts();
-        });
-    }
-
-    @Test
-    public void executeCommand_hideContactDetail_hidesPanelAndClearsId() throws Exception {
-        runAndWait(() -> {
-            mainWindow.setViewedContactId(UUID.randomUUID());
-            logic.setNextResult(new CommandResult("closed", false, false, null, true));
-            assertDoesNotThrow(() -> mainWindow.executeCommand("close view"));
-            assertNull(mainWindow.getViewedContactId());
-        });
-    }
-
-    @Test
-    public void executeCommand_showContactDetail_showsPanelAndSetsId() throws Exception {
-        runAndWait(() -> {
-            Contact contact = new ContactBuilder().withName("Test").build();
-            logic.setNextResult(new CommandResult("viewed", false, false, contact, false));
-            assertDoesNotThrow(() -> mainWindow.executeCommand("view 1"));
-            assertNotNull(mainWindow.getViewedContactId());
-        });
-    }
-
-    @Test
-    public void executeCommand_regularCommandWithViewedContact_refreshesPanel() throws Exception {
-        runAndWait(() -> {
-            Contact contact = new ContactBuilder().withName("Test").build();
-            logic.getContacts().add(contact);
-            mainWindow.setViewedContactId(contact.getId());
-            logic.setNextResult(new CommandResult("listed"));
-            assertDoesNotThrow(() -> mainWindow.executeCommand("list"));
-            assertNotNull(mainWindow.getViewedContactId());
-        });
-    }
-
-    @Test
-    public void executeCommand_regularCommandWithDeletedContact_hidesPanel() throws Exception {
-        runAndWait(() -> {
-            mainWindow.setViewedContactId(UUID.randomUUID());
-            logic.setNextResult(new CommandResult("deleted"));
-            assertDoesNotThrow(() -> mainWindow.executeCommand("delete 1"));
-            assertNull(mainWindow.getViewedContactId());
-        });
-    }
-
-    @Test
-    public void executeCommand_noViewedContact_noRefresh() throws Exception {
-        runAndWait(() -> {
-            mainWindow.setViewedContactId(null);
-            logic.setNextResult(new CommandResult("listed"));
-            assertDoesNotThrow(() -> mainWindow.executeCommand("list"));
-            assertNull(mainWindow.getViewedContactId());
-        });
-    }
-
-    @Test
-    public void scrollToTop_success() throws Exception {
-        runAndWait(() -> {
             logic.setNextResult(new CommandResult(ListCommand.MESSAGE_SUCCESS));
             assertDoesNotThrow(() -> mainWindow.executeCommand("list"));
-        });
-    }
-
-    @Test
-    public void scrollToBottom_success() throws Exception {
-        runAndWait(() -> {
             logic.setNextResult(
                     new CommandResult(
                             String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(new ContactBuilder().build()))));

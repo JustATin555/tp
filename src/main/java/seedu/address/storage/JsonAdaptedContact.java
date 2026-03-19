@@ -20,6 +20,7 @@ import seedu.address.model.contact.LastUpdated;
 import seedu.address.model.contact.Name;
 import seedu.address.model.contact.Note;
 import seedu.address.model.contact.Phone;
+import seedu.address.model.tag.RankedTag;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -43,12 +44,17 @@ class JsonAdaptedContact {
      * Constructs a {@code JsonAdaptedContact} with the given contact details.
      */
     @JsonCreator
-    public JsonAdaptedContact(@JsonProperty("id") String id, @JsonProperty("name") String name,
-            @JsonProperty("phone") Optional<String> phone,
-            @JsonProperty("email") Optional<String> email, @JsonProperty("address") Optional<String> address,
-            @JsonProperty("lastContacted") Optional<String> lastContacted,
-            @JsonProperty("lastUpdated") Optional<String> lastUpdated,
-            @JsonProperty("notes") Object notes, @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+    public JsonAdaptedContact(
+        @JsonProperty("id") String id,
+        @JsonProperty("name") String name,
+        @JsonProperty("phone") Optional<String> phone,
+        @JsonProperty("email") Optional<String> email,
+        @JsonProperty("address") Optional<String> address,
+        @JsonProperty("lastContacted") Optional<String> lastContacted,
+        @JsonProperty("lastUpdated") Optional<String> lastUpdated,
+        @JsonProperty("notes") Object notes,
+        @JsonProperty("tags") List<JsonAdaptedTag> tags
+    ) {
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -84,7 +90,9 @@ class JsonAdaptedContact {
         lastUpdated = Optional.of(source.getLastUpdated().toString());
         notes.addAll(source.getNotes().stream().map(Note::toJsonString).collect(Collectors.toList()));
         tags.addAll(source.getTags().stream()
-                .map(JsonAdaptedTag::new)
+                .map((Tag tag) -> tag instanceof RankedTag
+                    ? new JsonAdaptedRankedTag((RankedTag) tag)
+                    : new JsonAdaptedTag(tag))
                 .collect(Collectors.toList()));
     }
 
@@ -139,7 +147,7 @@ class JsonAdaptedContact {
         if (phone.isPresent() && !Phone.isValidPhone(phone.get())) {
             throw new IllegalValueException(Phone.MESSAGE_CONSTRAINTS);
         }
-        final Optional<Phone> modelPhone = phone.map(phone -> new Phone(phone));
+        final Optional<Phone> modelPhone = phone.map(Phone::new);
 
         if (email == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName()));
@@ -147,7 +155,7 @@ class JsonAdaptedContact {
         if (email.isPresent() && !Email.isValidEmail(email.get())) {
             throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
         }
-        final Optional<Email> modelEmail = email.map(email -> new Email(email));
+        final Optional<Email> modelEmail = email.map(Email::new);
 
         if (address == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
@@ -155,7 +163,7 @@ class JsonAdaptedContact {
         if (address.isPresent() && !Address.isValidAddress(address.get())) {
             throw new IllegalValueException(Address.MESSAGE_CONSTRAINTS);
         }
-        final Optional<Address> modelAddress = address.map(address -> new Address(address));
+        final Optional<Address> modelAddress = address.map(Address::new);
 
         if (lastContacted.isPresent() && !LastContacted.isValidLastContacted(lastContacted.get())) {
             throw new IllegalValueException(LastContacted.MESSAGE_CONSTRAINTS);
@@ -164,9 +172,9 @@ class JsonAdaptedContact {
         if (lastUpdated.isPresent() && !LastUpdated.isValidLastUpdated(lastUpdated.get())) {
             throw new IllegalValueException(LastUpdated.MESSAGE_CONSTRAINTS);
         }
-        final LastUpdated modelLastUpdated = lastUpdated.isPresent()
-                ? new LastUpdated(lastUpdated.get())
-                : LastUpdated.now();
+        final LastUpdated modelLastUpdated = lastUpdated
+            .map(LastUpdated::new)
+            .orElseGet(LastUpdated::now);
 
         final List<Note> modelNotes = notes.stream().map(Note::fromJsonString).collect(Collectors.toList());
 

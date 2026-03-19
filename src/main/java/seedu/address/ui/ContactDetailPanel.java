@@ -131,8 +131,8 @@ public class ContactDetailPanel extends UiPart<Region> {
         tags.getChildren().clear();
         if (!contact.getTags().isEmpty()) {
             contact.getTags().stream()
-                    .sorted(Comparator.comparing(tag -> tag.tagName))
-                    .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+                    .sorted(Comparator.comparing(tag -> tag.name))
+                    .forEach(tag -> tags.getChildren().add(new Label(tag.name)));
             tagsContainer.setVisible(true);
             tagsContainer.setManaged(true);
         } else {

@@ -12,23 +12,23 @@ public class RankedTag extends Tag {
     public static final String MESSAGE_CONSTRAINTS = "Ranked tag values should be alphanumeric";
     public static final String VALIDATION_REGEX = "\\p{Alnum}+";
 
-    public final String tagValue;
+    public final String rank;
 
     /**
      * Constructs a {@code RankedTag}.
      *
-     * @param tagName A valid tag name.
-     * @param tagValue A valid tag value.
+     * @param name A valid tag name.
+     * @param rank A valid tag rank.
      */
-    public RankedTag(String tagName, String tagValue) {
-        super(tagName);
-        requireNonNull(tagValue);
-        checkArgument(isValidTagValue(tagValue), MESSAGE_CONSTRAINTS);
-        this.tagValue = tagValue;
+    public RankedTag(String name, String rank) {
+        super(name);
+        requireNonNull(rank);
+        checkArgument(isValidTagValue(rank), MESSAGE_CONSTRAINTS);
+        this.rank = rank;
     }
 
     /**
-     * Returns true if a given string is a valid tag value.
+     * Returns true if a given string is a valid tag rank.
      */
     public static boolean isValidTagValue(String test) {
         return test.matches(VALIDATION_REGEX);
@@ -45,19 +45,19 @@ public class RankedTag extends Tag {
             return false;
         }
 
-        return tagName.equals(otherTag.tagName) && tagValue.equals(otherTag.tagValue);
+        return name.equals(otherTag.name) && rank.equals(otherTag.rank);
     }
 
     @Override
     public int hashCode() {
-        return (tagName + ':' + tagValue).hashCode();
+        return (name + ':' + rank).hashCode();
     }
 
     /**
      * Formats state as text for viewing.
      */
     public String toString() {
-        return '[' + tagName + ':' + tagValue + ']';
+        return '[' + name + ':' + rank + ']';
     }
 
 }

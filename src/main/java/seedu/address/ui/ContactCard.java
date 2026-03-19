@@ -109,11 +109,12 @@ public class ContactCard extends UiPart<Region> {
         }
         if (!(contact.getTags().isEmpty() && contact.getReminders().isEmpty())) {
             contact.getTags().stream()
-                    .sorted(Comparator.comparing(tag -> tag.tagName))
+                    .sorted(Comparator.comparing(tag -> tag.name))
                     .forEach(tag -> tags.getChildren().add(
-                        new Label(tag instanceof RankedTag
-                            ? tag.tagName + ':' + ((RankedTag) tag).tagValue
-                            : tag.tagName)));
+                        tag instanceof RankedTag
+                            ? new RankedTagLabel((RankedTag) tag)
+                            : new Label(tag.name)));
+
             if (!contact.getReminders().isEmpty()) {
                 Label reminderLabel = new Label("Reminder");
                 if (contact.hasDueReminders()) {

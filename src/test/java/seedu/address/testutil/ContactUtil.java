@@ -38,7 +38,7 @@ public class ContactUtil {
         contact.getLastContacted().ifPresent(
                 lastContacted -> sb.append(PREFIX_LAST_CONTACTED).append(lastContacted).append(" "));
         contact.getTags().stream().forEach(
-            s -> sb.append(PREFIX_TAG + s.tagName + " ")
+            s -> sb.append(PREFIX_TAG + s.name + " ")
         );
         return sb.toString();
     }
@@ -59,7 +59,7 @@ public class ContactUtil {
             if (tags.isEmpty()) {
                 sb.append(PREFIX_TAG);
             } else {
-                tags.forEach(s -> sb.append(PREFIX_TAG).append(s.tagName).append(" "));
+                tags.forEach(s -> sb.append(PREFIX_TAG).append(s.name).append(" "));
             }
         }
         return sb.toString();
