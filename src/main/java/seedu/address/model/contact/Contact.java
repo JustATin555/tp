@@ -107,7 +107,7 @@ public class Contact {
      * Creates a new instance of {@code Contact} with the same data as this {@code Contact}.
      */
     public Contact copy() {
-        return new Contact(id, name, phone, email, address, lastContacted, notes, tags);
+        return new Contact(id, name, phone, email, address, lastContacted, lastUpdated, notes, tags);
     }
 
     public Name getName() {

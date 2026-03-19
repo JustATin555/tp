@@ -20,7 +20,8 @@ public class ClearCommand extends Command {
 
         model.setAddressBook(new AddressBook());
 
-        model.saveSnapshot(MESSAGE_SUCCESS);
-        return new CommandResult(MESSAGE_SUCCESS);
+        String feedback = MESSAGE_SUCCESS;
+        model.saveSnapshot(feedback);
+        return new CommandResult(feedback);
     }
 }
