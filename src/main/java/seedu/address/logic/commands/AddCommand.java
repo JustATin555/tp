@@ -64,8 +64,10 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_CONTACT);
         }
 
+        model.resetDisplayedContactList();
         if (model.hasSimilarContact(toAdd)) {
             message = MESSAGE_SUCCESS_SIMILAR;
+            model.filterDisplayedContactList(toAdd::isSimilarContact);
         }
 
         model.addContact(toAdd);

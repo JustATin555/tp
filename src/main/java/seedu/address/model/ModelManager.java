@@ -112,7 +112,6 @@ public class ModelManager implements Model {
 
     @Override
     public void addContact(Contact contact) {
-        filterDisplayedContactList(contact::isSimilarContact);
         addressBook.addContact(contact);
     }
 
